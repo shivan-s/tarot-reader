@@ -1,0 +1,19 @@
+---
+version: '3.8'
+
+name: tarot-reader
+
+services:
+  app:
+    container_name: tarot-reader_app
+    build:
+      context: .
+      dockerfile: ./.docker/dev/Dockerfile
+    restart: unless-stopped
+    volumes:
+      - .:/code
+      - /code/node_modules/
+    env_file:
+      - .env
+    ports:
+      - '${APP_PORT:-5173}:5173'

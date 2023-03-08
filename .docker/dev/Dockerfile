@@ -11,4 +11,3 @@ COPY package*.json .
 RUN npm install --include=dev
 
 CMD ["npm", "run", "dev", "--", "--host"]
-

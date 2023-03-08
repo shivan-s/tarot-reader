@@ -1,31 +1,52 @@
 <script lang="ts">
-	const handleSubmit = (e: Event & { currentTarget: HTMLFormElement }) => {
-		const formData = new FormData(e.currentTarget);
-		const data: Record<string, unknown> = {};
+	import { applyAction, enhance } from '$app/forms';
+	import type { PageServerData, ActionData } from './$types';
 
-		for (let field of formData) {
-			const [key, value] = field;
-			data[key] = value;
-		}
+	export let data: PageServerData;
 
-		console.log(data);
-	};
+	export let form: ActionData;
+
+	const { tarotReadings } = data;
+
+	console.log(tarotReadings);
 </script>
 
 <h1>Tarot Card Reader</h1>
-<form on:submit|preventDefault={handleSubmit}>
+<form
+	method="POST"
+	action="?/reading"
+	use:enhance={async ({ form }) => {
+		return async ({ result, update }) => {
+			if (result.type === 'success') {
+				form.reset();
+			}
+			if (result.type === 'error') {
+				await applyAction(result);
+			}
+			update();
+		};
+	}}
+>
 	<label>
 		<strong>Question</strong>
-		<input type="text" id="question" />
+		<textarea value={form?.question ?? ''} rows="3" name="question" />
 	</label>
 	<label>
 		Number of cards:
-		<select id="cardNumber">
-			<option>1</option>
+		<select value={form?.numberCards ?? 1} name="numberCards">
+			<option selected>1</option>
 			<option>2</option>
 			<option>3</option>
 			<option>4</option>
+			<option>5</option>
+			<option>6</option>
+			<option>7</option>
 		</select>
 	</label>
-	<button aria-label="submit" type="submit">Submit</button>
+	<button>Submit</button>
 </form>
+
+{#each tarotReadings as tarotReading}
+	<p>{tarotReading.question}</p>
+	<p>{tarotReading.numberCards}</p>
+{/each}

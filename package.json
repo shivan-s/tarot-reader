@@ -14,7 +14,7 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"lint-staged": {
-		"{*.ts[x],*.js[x]}": [
+		"{*.ts[x],*.js[x],*.svelte}": [
 			"prettier --write",
 			"eslint --fix"
 		]

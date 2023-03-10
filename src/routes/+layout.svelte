@@ -10,7 +10,7 @@
 		<div>Made by <a class="link link-accent" href="https://shivan.xyz">Shivan Sivakumaran</a></div>
 		<div class="grid grid-flow-col gap-2">
 			<a class="link" href="https://twitter.com/ShivSivakumaran">Twitter</a>
-			<a class="link" href="https://github.com/shivan-s/tarot-reader">Source code</a>
+			<a class="link" href="https://github.com/shivan-s/tarotcard-reader">Source code</a>
 		</div>
 	</div>
 </div>

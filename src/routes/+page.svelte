@@ -1,15 +1,38 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 	import { enhance } from '$app/forms';
 	import Loading from '../components/loading.svelte';
 	import TarotCard from '../components/tarotCard.svelte';
 	import type { PageServerData, ActionData } from './$types';
+
+	const params = $page.url.searchParams;
+
+	console.log(params.has('read'));
 
 	export let data: PageServerData;
 
 	export let form: ActionData;
 
 	let loading = false;
+
 	$: tarotReading = data.tarotReading;
+	$: base64String = data.base64String;
+
+	if (params.has('read')) {
+		const previousReadString = params.get('read') || '[]';
+		try {
+			tarotReading = JSON.parse(atob(previousReadString));
+		} catch {
+			console.error('Read is wrong format');
+			tarotReading = undefined;
+		}
+	}
+
+	if (tarotReading) {
+		params.set('read', base64String);
+		goto(`?${params.toString()}`);
+	}
 </script>
 
 <h1 class="pt-6 text-center">Tarot Card Reader</h1>
@@ -82,6 +105,9 @@
 				<p>
 					<strong>Answer:</strong>
 					{tarotReading.answer}
+				</p>
+				<p class="break-all">
+					Share your read: {`${$page.url.pathname}/${base64String}`}
 				</p>
 			</div>
 		</div>

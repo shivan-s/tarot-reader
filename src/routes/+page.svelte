@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { goto } from '$app/navigation';
 	import { enhance } from '$app/forms';
 	import Loading from '../components/loading.svelte';
 	import TarotCard from '../components/tarotCard.svelte';
 	import type { PageServerData, ActionData } from './$types';
+	import type { TarotReading } from '../types';
 
 	const params = $page.url.searchParams;
 
@@ -16,8 +16,16 @@
 
 	let loading = false;
 
-	$: tarotReading = data.tarotReading;
-	$: base64String = data.base64String;
+	let tarotReading: TarotReading | undefined;
+	let base64String: string | undefined;
+
+	$: {
+		base64String = data.base64String;
+		tarotReading = data.tarotReading;
+		if (tarotReading) {
+			params.set('read', base64String);
+		}
+	}
 
 	if (params.has('read')) {
 		const previousReadString = params.get('read') || '[]';
@@ -27,11 +35,6 @@
 			console.error('Read is wrong format');
 			tarotReading = undefined;
 		}
-	}
-
-	if (tarotReading) {
-		params.set('read', base64String);
-		goto(`?${params.toString()}`);
 	}
 </script>
 
@@ -106,9 +109,8 @@
 					<strong>Answer:</strong>
 					{tarotReading.answer}
 				</p>
-				<p class="break-all">
-					Share your read: {`${$page.url.pathname}/${base64String}`}
-				</p>
+				<div class="divider" />
+				<p>Copy the URL to share your read.</p>
 			</div>
 		</div>
 	</div>

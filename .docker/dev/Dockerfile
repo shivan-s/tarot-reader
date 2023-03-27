@@ -1,4 +1,4 @@
-FROM node:19-slim
+FROM node:16-slim
 
 RUN npm update -g npm && \
   apt-get update && \

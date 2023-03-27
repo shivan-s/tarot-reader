@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { redirect } from '@sveltejs/kit';
 	import { enhance } from '$app/forms';
 	import Loading from '../components/loading.svelte';
 	import TarotCard from '../components/tarotCard.svelte';
 	import type { PageServerData, ActionData } from './$types';
 	import type { TarotReading } from '../types';
+	/* import { goto } from '$app/navigation'; */
 
 	const params = $page.url.searchParams;
 
@@ -21,10 +21,10 @@
 	$: {
 		base64String = data.base64String;
 		tarotReading = data.tarotReading;
-		/* TODO: cannot get redirection */
 		if (tarotReading && base64String) {
-			console.log('redirect');
-			redirect(303, `/read?${base64String}`);
+			params.set('read', base64String);
+			/* TODO: fix the redirect */
+			/* goto(`?${params.toString()}`); */
 		}
 	}
 

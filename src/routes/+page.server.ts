@@ -2,7 +2,7 @@ import type { Actions, PageServerLoad } from './$types';
 import { cards } from '../data/tarot-images.json';
 import { shuffleCards } from '../utils';
 import { z } from 'zod';
-/* import openaiCompletion from '../data/lib/openai'; */
+import openaiCompletion from '../data/lib/openai';
 import type { TarotReading } from '../types';
 
 let tarotReading: TarotReading | undefined = undefined;
@@ -40,14 +40,12 @@ export const actions = {
       shuffleCards(cards);
       const selectedCards = cards.slice(0, numberCards);
 
-      /* const answer = */
-      /*   (await openaiCompletion( */
-      /*     `How do these tarot cards, ${selectedCards */
-      /*       .map((card) => card.name) */
-      /*       .join(', ')} relate to my question, "${question}"` */
-      /*   )) || 'No answer.'; */
-
-      const answer = 'answer';
+      const answer =
+        (await openaiCompletion(
+          `How do these tarot cards, ${selectedCards
+            .map((card) => card.name)
+            .join(', ')} relate to my question, "${question}"`
+        )) || 'No answer.';
 
       tarotReading = {
         id,

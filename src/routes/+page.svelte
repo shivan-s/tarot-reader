@@ -27,8 +27,8 @@
 			/* goto(`?${params.toString()}`); */
 		}
 	}
-
 	if (params.has('read')) {
+		console.log('test', tarotReading);
 		const previousReadString = params.get('read') || '[]';
 		try {
 			tarotReading = JSON.parse(atob(previousReadString));
@@ -36,6 +36,7 @@
 			console.error('Read is wrong format');
 			tarotReading = undefined;
 		}
+		console.log(tarotReading);
 	}
 </script>
 
@@ -111,7 +112,7 @@
 					{tarotReading.answer}
 				</p>
 				<div class="divider" />
-				<p>Copy the URL to share your read.</p>
+				<textarea hidden bind:value={base64String} />
 			</div>
 		</div>
 	</div>

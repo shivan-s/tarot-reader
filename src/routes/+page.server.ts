@@ -2,7 +2,7 @@ import type { Actions, PageServerLoad } from './$types';
 import { cards } from '../data/tarot-images.json';
 import { shuffleCards } from '../utils';
 import { z } from 'zod';
-import openaiCompletion from '../data/lib/openai';
+import openaiCompletion from '$lib/openai';
 import type { TarotReading } from '../types';
 
 let tarotReading: TarotReading | undefined = undefined;
@@ -60,14 +60,21 @@ export const actions = {
       return { success: true, question, numberCards, errors: null };
     } catch (err) {
       console.error(err);
-      const { fieldErrors: errors } = err.flatten();
-      const { question, numberCards } = formData;
-      return {
-        success: false,
-        question: String(question || ''),
-        numberCard: String(numberCards || ''),
-        errors
-      };
+      try {
+        const { fieldErrors: errors } = err.flatten();
+        const { question, numberCards } = formData;
+        return {
+          success: false,
+          question: String(question || ''),
+          numberCard: String(numberCards || ''),
+          errors
+        };
+      } catch (err) {
+        return {
+          success: false,
+          errors: 'OpenAI'
+        };
+      }
     }
   }
 } satisfies Actions;
